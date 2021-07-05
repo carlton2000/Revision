@@ -97,16 +97,25 @@
           </div>  
 
           <div id="bodyContainer">
-              <textarea id="htmlPanel" class="panel "><p>Hello World, Type Here!!!</p></textarea>
+              <textarea id="htmlPanel" class="panel "><p id="paragraph">Hello World, Type Here to see the outcome of your code!!!</p></textarea>
               <textarea id="cssPanel" class="panel hidden">p {color: green ; font-size:50px}</textarea>
-              <textarea id="javascriptPanel" class="panel hidden">alert("Hi there!")</textarea>
+              <textarea id="javascriptPanel" class="panel hidden">document.getElementById("paragraph").innerHTML = "Hello Rob!";</textarea>
               <iframe id="outputPanel" class="panel"></iframe>
 
           </div>
 
 
         <script type="text/javascript">
+            function updateOutput() {
+                $("iframe").contents().find("html").html("<html><head><style type='text/css'>" + $("#cssPanel").val() +
+                     "</style></head><body>" + $("#htmlPanel").val() + "</body></html>");
 
+                     document.getElementById("outputPanel").contentWindow.eval($("#javascriptPanel").val());
+
+                     
+            }
+
+            // Evaluates a string of javascript
            
             $(".toggleButton").hover(function() {
                 $(this).addClass("hightlightedButton");
@@ -125,12 +134,13 @@
 
             $(".panel").height($(window).height() - $("#header").height() -15);
             $(".panel").width(($(window).width() / 2) -10);
-            $("iframe").contents().find("html").html("<html><head><style type='text/css'>" + $("#cssPanel").val() + "</style></head><body>" + $("#htmlPanel").val() + "</body></html>"); 
-            // $("iframe").contents().find("html").html('My html');
+            updateOutput();
+            $("iframe").contents().find("html").html($("#htmlPanel").val());
 
             $("textarea").on('change keyup paste', function(){
                 
-            $("iframe").contents().find("html").html("<html><head><style type='text/css'>" + $("#cssPanel").val() + "</style></head><body>" + $("#htmlPanel").val() + "</body></html>");     
+            updateOutput();  
+
             });
 
         </script>
